@@ -2,6 +2,11 @@
 <html>
     <body>
         <canvas width="700" height="323"></canvas>
+        <div style="display:none;">
+            <img id="bg" src="desert.png" width="700" height="323">
+            <img id="cactus" src="cactus.png" width="50" height="80">
+            <img id="balloon" src="balloon.png" width="50" height="100">
+          </div>
 
         <script>
             function rr(min, max) {
@@ -18,11 +23,14 @@
                 context.save();
                 
                 circles.forEach( e => {
-                    context.beginPath();
-                    context.arc(e.x, e.y, e.radius, 0, Math.PI*2);
-                    context.lineWidth = e.linewidth;
-                    context.strokeStyle = e.color;
-                    context.stroke();
+                    // context.beginPath();
+                    // context.arc(e.x, e.y, e.radius, 0, Math.PI*2);
+                    // context.lineWidth = e.linewidth;
+                    // context.strokeStyle = e.color;
+                    // context.stroke();
+                    const image = document.getElementById('cactus');
+                    
+                    context.drawImage(image, e.x, e.y, image.width * e.factor, image.height * e.factor);
                 });
 
                 context.restore();
@@ -31,11 +39,14 @@
             let bird = { x: 50, y: 50, size: 20 };
             function drawBird(canvas, context) {
                 context.save();
-                context.beginPath();
-                context.arc(bird.x, bird.y, bird.size, 0, Math.PI*2);
-                    context.lineWidth = 8;
-                    context.strokeStyle = 'red';
-                    context.stroke();
+                // context.beginPath();
+                // context.arc(bird.x, bird.y, bird.size, 0, Math.PI*2);
+                //     context.lineWidth = 8;
+                //     context.strokeStyle = 'red';
+                //     context.stroke();
+
+                const image = document.getElementById('balloon');
+                context.drawImage(image, bird.x, bird.y, image.width, image.height);
                 context.restore();
             }
 
@@ -63,7 +74,8 @@
                    y: y,
                    radius: radius,
                    linewidth : linewidth,
-                   color: color
+                   color: color,
+                   factor: rr(1,3)
                 });
             }
 
