@@ -37,17 +37,13 @@
                 context.restore();
             }
 
-            let bird = { x: 50, y: 50, size: 20 };
-            function drawBird(canvas, context) {
+            let balloon = { x: 50, y: 300, size: 20 };
+            function drawBalloon(canvas, context) {
                 context.save();
-                // context.beginPath();
-                // context.arc(bird.x, bird.y, bird.size, 0, Math.PI*2);
-                //     context.lineWidth = 8;
-                //     context.strokeStyle = 'red';
-                //     context.stroke();
 
                 const image = document.getElementById('balloon');
-                context.drawImage(image, bird.x, bird.y, image.width, image.height);
+                context.drawImage(image, balloon.x, balloon.y, image.width, image.height);
+
                 context.restore();
             }
 
@@ -68,7 +64,7 @@
                 context.drawImage(document.getElementById('bg'), 0, 0, w, h);
 
                 drawCircles(canvas, context);
-                drawBird(canvas, context);
+                drawBalloon(canvas, context);
             }
 
             function addCircle(x, y, radius, color, linewidth) {
@@ -94,26 +90,26 @@
                 switch( e.key ) {
                     case 'ArrowUp':
                     case 'w':
-                        bird.y -= 10;
+                        balloon.y -= 10;
                         break;
                     
                     case 'ArrowDown':
                     case 's':
-                        bird.y += 10;
+                        balloon.y += 10;
                         break;
                     
                     case 'ArrowLeft':
                     case 'a':
-                        bird.x -= 10;
+                        balloon.x -= 10;
                         break;
                     
                     case 'ArrowRight':
                     case 'd':
-                        bird.x += 10;
+                        balloon.x += 10;
                         break;
 
                     case ' ':
-                        bird.y -= 10;
+                        balloon.y -= 10;
                         break; 
                 }
                 
@@ -126,54 +122,31 @@
                 const w = canvas.width;
                 const h = canvas.height;
 
-                // addCircle(Math.random() * w, Math.random() * h,Math.random() * 80, colors[rr(0,colors.length - 1)], 4+rr(0,25) );
-                // addCircle(Math.random() * w, Math.random() * h,Math.random() * 80, colors[rr(0,colors.length - 1)], 4+rr(0,25) );
-                // addCircle(Math.random() * w, Math.random() * h,Math.random() * 80, colors[rr(0,colors.length - 1)], 4+rr(0,25) );
-                // addCircle(Math.random() * w, Math.random() * h,Math.random() * 80, colors[rr(0,colors.length - 1)], 4+rr(0,25) );
+                canvas.addEventListener("mousedown", onCanvasClick);
+                document.addEventListener("keyup", e => onKeyDown(e));
 
-                canvas.onmousedown = onCanvasClick;
+                setInterval(() => {
+                    circles.forEach( c => {
+                        c.x -= 3;
+                    });
+                    drawGame();
+                }, 50);
+
+                setInterval(() => { 
+                    if (rr(1,16)%7) { 
+                        addCircle(w, h-160, 20, 'red', 5);
+                        drawGame();
+                    }
+                }, 2000);
                 
-                document.addEventListener("keydown", e => onKeyDown(e));
-            }
-
-            function moveCirclesLeft() {
-                circles.forEach( c => {
-                    c.x -= 3;
-                });
-                drawGame();
+                setInterval( () => {
+                    balloon.y = Math.min( balloon.y + 15, h );
+                    drawGame();
+                }, 500);
             }
 
             init();
             drawGame();
-            setInterval(moveCirclesLeft, 50);
-            
-            setInterval( () => {
-                bird.y = 0;
-            }, 1000);
-
-            // function drawCircles() {
-            //     let canvas = document.querySelector('canvas');
-            //     let context = canvas.getContext('2d');
-
-            //     const w = canvas.width;
-            //     const h = canvas.height;
-
-            //     context.globalCompositeOperation = 'destination-over';
-            //     context.clearRect(0, 0, w, h);
-
-            //     colors = ['red', 'green', 'blue', 'yellow', 'orange', 'purple', 'brown', 'black', 'white'];
-
-            //     for( i = 0; i < 500; i++ ) {
-            //         context.beginPath();
-            //         context.arc(Math.random() * w, Math.random() * h,Math.random() * 80,0,Math.PI*2);
-            //         context.lineWidth = 4 + Math.random() * 25;
-            //         context.strokeStyle = colors[Math.floor(Math.random() * colors.length)];
-            //         context.stroke();
-            //     }
-            // }
-
-            //window.requestAnimationFrame(draw);
-            //setInterval(() => window.requestAnimationFrame(drawCircles), 2000);
 
         </script>
     </body>
