@@ -1,0 +1,162 @@
+<!-- resolution 2532-1170 (2.164:1) iphone 13 std -->
+<html>
+    <body>
+        <canvas width="700" height="323"></canvas>
+
+        <script>
+            function rr(min, max) {
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            }
+
+            let colors = ['red', 'green', 'blue', 'yellow', 'orange', 'purple', 'brown', 'black', 'white'];
+            let circles = [];
+
+            function drawCircles(canvas, context) {
+                const w = canvas.width;
+                const h = canvas.height;
+
+                context.save();
+                
+                circles.forEach( e => {
+                    context.beginPath();
+                    context.arc(e.x, e.y, e.radius, 0, Math.PI*2);
+                    context.lineWidth = e.linewidth;
+                    context.strokeStyle = e.color;
+                    context.stroke();
+                });
+
+                context.restore();
+            }
+
+            let bird = { x: 50, y: 50, size: 20 };
+            function drawBird(canvas, context) {
+                context.save();
+                context.beginPath();
+                context.arc(bird.x, bird.y, bird.size, 0, Math.PI*2);
+                    context.lineWidth = 8;
+                    context.strokeStyle = 'red';
+                    context.stroke();
+                context.restore();
+            }
+
+            function drawGame() {
+                let canvas = document.querySelector('canvas');
+                let context = canvas.getContext('2d');
+
+                const w = canvas.width;
+                const h = canvas.height;
+
+                context.clearRect(0, 0, w, h);
+                
+                context.save();
+                context.fillStyle = '#cccccc';
+                context.fillRect(0, 0, w, h);
+                context.restore();
+
+                drawCircles(canvas, context);
+                drawBird(canvas, context);
+            }
+
+            function addCircle(x, y, radius, color, linewidth) {
+                circles.push({
+                   x: x,
+                   y: y,
+                   radius: radius,
+                   linewidth : linewidth,
+                   color: color
+                });
+            }
+
+            function onCanvasClick(e) {
+                //console.log(e);
+                addCircle(e.x, e.y, rr(10, 80), colors[rr(0, colors.length - 1)], rr(1, 5));
+                drawGame();
+            }
+
+            function onKeyDown(e) {
+                e = e || window.event;
+                console.log(e);
+
+                switch( e.key ) {
+                    case 'ArrowUp':
+                    case 'w':
+                        bird.y -= 10;
+                        break;
+                    
+                    case 'ArrowDown':
+                    case 's':
+                        bird.y += 10;
+                        break;
+                    
+                    case 'ArrowLeft':
+                    case 'a':
+                        bird.x -= 10;
+                        break;
+                    
+                    case 'ArrowRight':
+                    case 'd':
+                        bird.x += 10;
+                        break;
+                }
+                
+                drawGame();
+                return true;
+            }
+
+            function init() {
+                let canvas = document.querySelector('canvas');
+                const w = canvas.width;
+                const h = canvas.height;
+
+                // addCircle(Math.random() * w, Math.random() * h,Math.random() * 80, colors[rr(0,colors.length - 1)], 4+rr(0,25) );
+                // addCircle(Math.random() * w, Math.random() * h,Math.random() * 80, colors[rr(0,colors.length - 1)], 4+rr(0,25) );
+                // addCircle(Math.random() * w, Math.random() * h,Math.random() * 80, colors[rr(0,colors.length - 1)], 4+rr(0,25) );
+                // addCircle(Math.random() * w, Math.random() * h,Math.random() * 80, colors[rr(0,colors.length - 1)], 4+rr(0,25) );
+
+                canvas.onmousedown = onCanvasClick;
+                
+                document.addEventListener("keydown", e => onKeyDown(e));
+            }
+
+            function moveCirclesLeft() {
+                circles.forEach( c => {
+                    c.x -= 3;
+                });
+                drawGame();
+            }
+
+            init();
+            drawGame();
+            setInterval(moveCirclesLeft, 50);
+            
+            setInterval( () => {
+                bird.y = 0;
+            }, 1000);
+
+            // function drawCircles() {
+            //     let canvas = document.querySelector('canvas');
+            //     let context = canvas.getContext('2d');
+
+            //     const w = canvas.width;
+            //     const h = canvas.height;
+
+            //     context.globalCompositeOperation = 'destination-over';
+            //     context.clearRect(0, 0, w, h);
+
+            //     colors = ['red', 'green', 'blue', 'yellow', 'orange', 'purple', 'brown', 'black', 'white'];
+
+            //     for( i = 0; i < 500; i++ ) {
+            //         context.beginPath();
+            //         context.arc(Math.random() * w, Math.random() * h,Math.random() * 80,0,Math.PI*2);
+            //         context.lineWidth = 4 + Math.random() * 25;
+            //         context.strokeStyle = colors[Math.floor(Math.random() * colors.length)];
+            //         context.stroke();
+            //     }
+            // }
+
+            //window.requestAnimationFrame(draw);
+            //setInterval(() => window.requestAnimationFrame(drawCircles), 2000);
+
+        </script>
+    </body>
+</html>
