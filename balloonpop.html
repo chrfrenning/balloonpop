@@ -4,8 +4,9 @@
         <canvas width="700" height="323"></canvas>
         <div style="display:none;">
             <img id="bg" src="desert.png" width="700" height="323">
-            <img id="cactus" src="cactus.png" width="50" height="80">
+            <img id="cactus" src="cactus.png" width="80 " height="160">
             <img id="balloon" src="balloon.png" width="50" height="100">
+            <audio id="soundtrack" src="soundtrack.mp3"></audio>
           </div>
 
         <script>
@@ -14,24 +15,26 @@
             }
 
             let colors = ['red', 'green', 'blue', 'yellow', 'orange', 'purple', 'brown', 'black', 'white'];
-            let circles = [];
+            let dimensions = { w: 0, h: 0, cactusHeight : 75 };
+            let cactuses = [];
             let points = 0;
 
-            function drawCircles(canvas, context) {
+            function drawCactii(canvas, context) {
                 const w = canvas.width;
                 const h = canvas.height;
 
                 context.save();
-                
-                circles.forEach( e => {
+
+                const image = document.getElementById('cactus');
+                cactuses.forEach( e => {
                     // context.beginPath();
                     // context.arc(e.x, e.y, e.radius, 0, Math.PI*2);
                     // context.lineWidth = e.linewidth;
                     // context.strokeStyle = e.color;
                     // context.stroke();
-                    const image = document.getElementById('cactus');
                     
-                    context.drawImage(image, e.x, e.y, image.width * e.factor, image.height * e.factor);
+                    
+                    context.drawImage(image, e.x, e.y, image.width, image.height);
                 });
 
                 context.restore();
@@ -63,29 +66,24 @@
 
                 context.drawImage(document.getElementById('bg'), 0, 0, w, h);
 
-                drawCircles(canvas, context);
+                drawCactii(canvas, context);
                 drawBalloon(canvas, context);
             }
 
-            function addCircle(x, y, radius, color, linewidth) {
-                circles.push({
-                   x: x,
-                   y: y,
-                   radius: radius,
-                   linewidth : linewidth,
-                   color: color,
-                   factor: rr(1,3)
+            function addCactus() {
+                cactuses.push({
+                   x: dimensions.w,
+                   y: dimensions.h-dimensions.cactusHeight,
                 });
             }
 
             function onCanvasClick(e) {
-                addCircle(e.x, e.y, rr(10, 80), colors[rr(0, colors.length - 1)], rr(1, 5));
+                addCactus();
                 drawGame();
             }
 
             function onKeyDown(e) {
                 e = e || window.event;
-                console.log(e);
 
                 switch( e.key ) {
                     case 'ArrowUp':
@@ -119,30 +117,43 @@
 
             function init() {
                 let canvas = document.querySelector('canvas');
+
                 const w = canvas.width;
                 const h = canvas.height;
 
+                dimensions.w = w;
+                dimensions.h = h;
+
+                balloon.size = document.getElementById('balloon').height;
+                dimensions.cactusHeight = document.getElementById('cactus').height-25;
+
                 canvas.addEventListener("mousedown", onCanvasClick);
-                document.addEventListener("keyup", e => onKeyDown(e));
+                document.addEventListener("keydown", onKeyDown);
 
                 setInterval(() => {
-                    circles.forEach( c => {
+                    cactuses.forEach( c => {
                         c.x -= 3;
                     });
                     drawGame();
                 }, 50);
 
                 setInterval(() => { 
-                    if (rr(1,16)%7) { 
-                        addCircle(w, h-160, 20, 'red', 5);
+                    if (rr(1,100)%25) { 
+                        addCactus();
                         drawGame();
                     }
-                }, 2000);
+                }, 3000);
                 
                 setInterval( () => {
-                    balloon.y = Math.min( balloon.y + 15, h );
+                    balloon.y = Math.min( balloon.y + 2, h - balloon.size );
                     drawGame();
-                }, 500);
+                }, 75);
+
+                window.addEventListener("DOMContentLoaded", event => {
+                    const audio = document.getElementById('soundtrack');
+                    audio.volume = 0.2;
+                    audio.play();
+                });
             }
 
             init();
