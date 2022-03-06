@@ -15,6 +15,7 @@
 
             let colors = ['red', 'green', 'blue', 'yellow', 'orange', 'purple', 'brown', 'black', 'white'];
             let circles = [];
+            let points = 0;
 
             function drawCircles(canvas, context) {
                 const w = canvas.width;
@@ -57,12 +58,14 @@
                 const w = canvas.width;
                 const h = canvas.height;
 
-                context.clearRect(0, 0, w, h);
+                //context.clearRect(0, 0, w, h);
                 
                 context.save();
                 context.fillStyle = '#cccccc';
                 context.fillRect(0, 0, w, h);
                 context.restore();
+
+                context.drawImage(document.getElementById('bg'), 0, 0, w, h);
 
                 drawCircles(canvas, context);
                 drawBird(canvas, context);
@@ -80,7 +83,6 @@
             }
 
             function onCanvasClick(e) {
-                //console.log(e);
                 addCircle(e.x, e.y, rr(10, 80), colors[rr(0, colors.length - 1)], rr(1, 5));
                 drawGame();
             }
@@ -109,6 +111,10 @@
                     case 'd':
                         bird.x += 10;
                         break;
+
+                    case ' ':
+                        bird.y -= 10;
+                        break; 
                 }
                 
                 drawGame();
