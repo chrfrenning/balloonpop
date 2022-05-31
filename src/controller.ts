@@ -2,34 +2,50 @@ import { Model } from "./model";
 import { View } from "./view";
 
 export class Controller {
+    m : Model;
+    v : View;
+    debug : boolean = true;
+
     constructor(m : Model, v : View) {
+        this.m = m;
+        this.v = v;
+
         m.setController( this );
         v.setController( this );
 
         setInterval(() => {
             if ( m.isDirty() ) {
+                console.log("redrawing");
                 v.draw();
                 m.clearDirty();
             }
         }, 50);
+
+        setInterval(() => {
+            this.m.tick();
+        }, 500);
     }
 
     // keyboard commands
 
     up() : void {
-        console.log("button");
+        this.m.balloon.move(0, -this.random(1, 50));
     }
 
     down() : void {
-        console.log("button");
+        this.m.balloon.move(0, this.random(1, 50));
     }
 
     left() : void {
-        console.log("button");
+        this.m.balloon.move(-this.random(1,50), 0);
     }
 
     right() : void {
-        console.log("button");
+        this.m.balloon.move(this.random(1,50), 0);
+    }
+
+    newRandomObject() : void {
+        console.log("Implement me!");
     }
 
     // random generator

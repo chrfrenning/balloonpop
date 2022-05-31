@@ -20,7 +20,20 @@ export class View {
         const h = this.canvas.height;
 
         let ctx = this.canvas.getContext("2d");
-        ctx.font = "30px Arial";
-        ctx.strokeText("Hello World!", 10, 10);
+
+        ctx.fillStyle = "#EEEEEE";
+        ctx.fillRect(0, 0, w, h);
+
+        ctx.font = "18px Comic Sans MS";
+        ctx.strokeStyle = "#cccccc";
+        ctx.fillStyle = "#cccccc";
+        var text = "BalloonPOP! (c) chph.io";
+        var metrics = ctx.measureText( text );
+        ctx.fillText(text, (w - metrics.width - 10), (h - metrics.actualBoundingBoxAscent) );
+
+        ctx.save();
+        this.model.getAllGameObjects().forEach(o => o.draw(ctx));
+        this.model.clearDirty();
+        ctx.restore();
     }
 };
