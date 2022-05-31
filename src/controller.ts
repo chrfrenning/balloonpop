@@ -2,6 +2,8 @@ import { Model } from "./model";
 import { View } from "./view";
 
 export class Controller {
+    FRAME_RATE : number = 25;
+
     m : Model;
     v : View;
     debug : boolean = true;
@@ -15,15 +17,18 @@ export class Controller {
 
         setInterval(() => {
             if ( m.isDirty() ) {
-                console.log("redrawing");
                 v.draw();
                 m.clearDirty();
             }
-        }, 50);
+        }, 1000 / this.FRAME_RATE);
 
         setInterval(() => {
-            this.m.tick();
-        }, 500);
+            this.m.smallTick();
+        }, 1000 / this.FRAME_RATE);
+
+        setInterval(() => {
+            this.m.bigTick();
+        }, 1000 / 10);
     }
 
     // keyboard commands
