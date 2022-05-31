@@ -1,0 +1,22 @@
+<!-- resolution 2532-1170 (2.164:1) iphone 13 std -->
+<html>
+    <head>
+        <script type="text/javascript" src="require.js"></script>
+    </head>
+    <body>
+        <canvas width="100%" height="100%"></canvas>
+        <div style="display:none;">
+            <!-- <img id="bg" src="gfx/desert.png" width="700" height="323">
+            <img id="cactus" src="gfx/cactus.png" width="80 " height="160">
+            <img id="balloon" src="gfx/balloon.png" width="50" height="100">
+            <audio id="soundtrack" src="sfx/soundtrack.mp3"></audio> -->
+          </div>
+
+        <script>
+            require.config( {baseUrl: './js/'} );
+            require(['balloonpop'], function(g) {
+                g.wireupGame(document);
+            });
+        </script>
+    </body>
+</html>
