@@ -1,164 +1,22 @@
 <!-- resolution 2532-1170 (2.164:1) iphone 13 std -->
 <html>
+    <head>
+        <script type="text/javascript" src="require.js"></script>
+    </head>
     <body>
-        <canvas width="700" height="323"></canvas>
+        <canvas width="100%" height="100%"></canvas>
         <div style="display:none;">
-            <img id="bg" src="gfx/desert.png" width="700" height="323">
+            <!-- <img id="bg" src="gfx/desert.png" width="700" height="323">
             <img id="cactus" src="gfx/cactus.png" width="80 " height="160">
             <img id="balloon" src="gfx/balloon.png" width="50" height="100">
-            <audio id="soundtrack" src="sfx/soundtrack.mp3"></audio>
+            <audio id="soundtrack" src="sfx/soundtrack.mp3"></audio> -->
           </div>
 
         <script>
-            function rr(min, max) {
-                return Math.floor(Math.random() * (max - min + 1)) + min;
-            }
-
-            let colors = ['red', 'green', 'blue', 'yellow', 'orange', 'purple', 'brown', 'black', 'white'];
-            let dimensions = { w: 0, h: 0, cactusHeight : 75 };
-            let cactuses = [];
-            let points = 0;
-
-            function drawCactii(canvas, context) {
-                const w = canvas.width;
-                const h = canvas.height;
-
-                context.save();
-
-                const image = document.getElementById('cactus');
-                cactuses.forEach( e => {
-                    // context.beginPath();
-                    // context.arc(e.x, e.y, e.radius, 0, Math.PI*2);
-                    // context.lineWidth = e.linewidth;
-                    // context.strokeStyle = e.color;
-                    // context.stroke();
-                    
-                    
-                    context.drawImage(image, e.x, e.y, image.width, image.height);
-                });
-
-                context.restore();
-            }
-
-            let balloon = { x: 50, y: 300, size: 20 };
-            function drawBalloon(canvas, context) {
-                context.save();
-
-                const image = document.getElementById('balloon');
-                context.drawImage(image, balloon.x, balloon.y, image.width, image.height);
-
-                context.restore();
-            }
-
-            function drawGame() {
-                let canvas = document.querySelector('canvas');
-                let context = canvas.getContext('2d');
-
-                const w = canvas.width;
-                const h = canvas.height;
-
-                //context.clearRect(0, 0, w, h);
-                
-                context.save();
-                context.fillStyle = '#cccccc';
-                context.fillRect(0, 0, w, h);
-                context.restore();
-
-                context.drawImage(document.getElementById('bg'), 0, 0, w, h);
-
-                drawCactii(canvas, context);
-                drawBalloon(canvas, context);
-            }
-
-            function addCactus() {
-                cactuses.push({
-                   x: dimensions.w,
-                   y: dimensions.h-dimensions.cactusHeight,
-                });
-            }
-
-            function onCanvasClick(e) {
-                addCactus();
-                drawGame();
-            }
-
-            function onKeyDown(e) {
-                e = e || window.event;
-
-                switch( e.key ) {
-                    case 'ArrowUp':
-                    case 'w':
-                        balloon.y -= 10;
-                        break;
-                    
-                    case 'ArrowDown':
-                    case 's':
-                        balloon.y += 10;
-                        break;
-                    
-                    case 'ArrowLeft':
-                    case 'a':
-                        balloon.x -= 10;
-                        break;
-                    
-                    case 'ArrowRight':
-                    case 'd':
-                        balloon.x += 10;
-                        break;
-
-                    case ' ':
-                        balloon.y -= 10;
-                        break; 
-                }
-                
-                drawGame();
-                return true;
-            }
-
-            function init() {
-                let canvas = document.querySelector('canvas');
-
-                const w = canvas.width;
-                const h = canvas.height;
-
-                dimensions.w = w;
-                dimensions.h = h;
-
-                balloon.size = document.getElementById('balloon').height;
-                dimensions.cactusHeight = document.getElementById('cactus').height-25;
-
-                canvas.addEventListener("mousedown", onCanvasClick);
-                document.addEventListener("keydown", onKeyDown);
-
-                setInterval(() => {
-                    cactuses.forEach( c => {
-                        c.x -= 3;
-                    });
-                    drawGame();
-                }, 50);
-
-                setInterval(() => { 
-                    if (rr(1,100)%25) { 
-                        addCactus();
-                        drawGame();
-                    }
-                }, 3000);
-                
-                setInterval( () => {
-                    balloon.y = Math.min( balloon.y + 2, h - balloon.size );
-                    drawGame();
-                }, 75);
-
-                window.addEventListener("DOMContentLoaded", event => {
-                    const audio = document.getElementById('soundtrack');
-                    audio.volume = 0.2;
-                    audio.play();
-                });
-            }
-
-            init();
-            drawGame();
-
+            require.config( {baseUrl: './js/'} );
+            require(['balloonpop'], function(g) {
+                g.wireupGame(document);
+            });
         </script>
     </body>
 </html>
